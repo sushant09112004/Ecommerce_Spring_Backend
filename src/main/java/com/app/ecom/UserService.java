@@ -2,6 +2,7 @@ package com.app.ecom;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import org.springframework.stereotype.Service;
 
 @Service
@@ -26,5 +27,19 @@ public class UserService {
             }
          }
          return null;
+     }
+     public User updateUser(Long id, User newUser) {
+        for (User user : userList) {
+            if (user.getId().equals(id)) {
+                if (newUser.getFirstName() != null) {
+                    user.setFirstName(newUser.getFirstName());
+                }
+                if (newUser.getLastName() != null) {
+                    user.setLastName(newUser.getLastName());
+                }
+                return user;
+            }
+        }
+        return null;
      }
 }
