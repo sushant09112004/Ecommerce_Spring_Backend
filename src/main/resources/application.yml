@@ -1,0 +1,25 @@
+#spring.application.name=ecom-application
+#spring.application.name = ecom -application
+#spring.h2.console.enabled=true
+#spring.datasource.url=jdbc:h2:mem:test
+
+#above return is the format if that is retun in the application.properties file if  .yml is used it should be written in th below format
+
+spring:
+  application:
+    name: ecom-application
+
+  h2:
+    console:
+      enabled: true
+
+  datasource:
+    url: jdbc:h2:mem:test
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
