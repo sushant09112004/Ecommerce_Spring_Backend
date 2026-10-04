@@ -3,35 +3,40 @@ package com.app.ecom.controller;
 import java.util.List;
 import java.util.Optional;
 
-import com.app.ecom.model.User;
+import com.app.ecom.dto.UserRequest;
+import com.app.ecom.dto.UserResponse;
 import com.app.ecom.service.UserService;
+
+import lombok.RequiredArgsConstructor;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PutMapping;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/users")
 public class UserController {
+
     private final UserService userService;
 
     @GetMapping
-    public ResponseEntity<List<User>> getAllUsers() {
+    public ResponseEntity<List<UserResponse>> getAllUsers() {
+
         return ResponseEntity.ok(userService.fetchAllUsers());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<User> requestMethodName(@PathVariable Long id) {
+    public ResponseEntity<UserResponse> getUser(
+            @PathVariable Long id) {
 
-        Optional<User> user = userService.fetchUser(id);
+        Optional<UserResponse> user = userService.fetchUser(id);
 
         if (user.isEmpty()) {
             return ResponseEntity.notFound().build();
@@ -40,26 +45,24 @@ public class UserController {
         return ResponseEntity.ok(user.get());
     }
 
-    public ResponseEntity<User> getUser(@PathVariable Long id) {
-        Optional<User> user = userService.fetchUser(id);
-        if (user.isEmpty()) {
-            return ResponseEntity.notFound().build();
-        }
-        return new ResponseEntity<>(user.get(), HttpStatus.OK);
-    }
-
     @PostMapping
-    public ResponseEntity<String> createUser(@RequestBody User user) {
-        userService.addUser(user);
-        return new ResponseEntity<>("User added Succesfully", HttpStatus.CREATED);
+    public ResponseEntity<UserResponse> createUser(
+            @RequestBody UserRequest userRequest) {
+
+        UserResponse user = userService.addUser(userRequest);
+
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(user);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<User> updateUser(
+    public ResponseEntity<UserResponse> updateUser(
             @PathVariable Long id,
-            @RequestBody User user) {
+            @RequestBody UserRequest updateUserRequest) {
 
-        Optional<User> updatedUser = userService.updateUser(id, user);
+        Optional<UserResponse> updatedUser =
+                userService.updateUser(id, updateUserRequest);
 
         if (updatedUser.isEmpty()) {
             return ResponseEntity.notFound().build();
