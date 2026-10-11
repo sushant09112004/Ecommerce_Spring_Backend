@@ -4,6 +4,7 @@ import com.app.ecom.dto.ProductRequest;
 import com.app.ecom.dto.ProductResponse;
 import com.app.ecom.service.ProductService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
@@ -37,5 +38,13 @@ public class ProductController {
                 .orElseGet(() -> ResponseEntity.notFound().build());
 
     }
-
+    @DeleteMapping("{id}")
+    public ResponseEntity<Void> deleteProduct(@PathVariable Long id){
+        productService.deleteProduct(id);
+        return ResponseEntity.notFound().build();
+    }
+    @GetMapping("/search")
+    public ResponseEntity<List<ProductResponse>> serachProducts(@RequestParam String keyword) {
+        return ResponseEntity.ok(productService.searchProduct(keyword));
+    }
 }

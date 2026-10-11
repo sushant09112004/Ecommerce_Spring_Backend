@@ -60,4 +60,19 @@ public class ProductService {
                 .map(this::mapToProductResponse)
                 .collect(Collectors.toList());
     }
+
+    public void deleteProduct(Long id) {
+        Product product = productRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("not found the element"));
+        product.setActive(false);
+        productRepository.save(product);
+
+    }
+
+    public List<ProductResponse> searchProduct( String keyword) {
+        return productRepository.searchProducts(keyword).stream()
+                .map(this ::mapToProductResponse)
+                .collect(Collectors.toList());
+
+    }
 }
